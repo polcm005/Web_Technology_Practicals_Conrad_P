@@ -1,4 +1,9 @@
+using AOWebApp2.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AmazonOrdersDb2025Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AmazonOrdersDb2025Context")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
