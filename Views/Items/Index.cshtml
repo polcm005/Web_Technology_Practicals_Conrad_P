@@ -10,7 +10,18 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-
+<form class="mb-3 row" method="post">
+    <label for="ItemSearch" class="col-sm-1 col-form-label">Item Search</label>
+    <div class="col-sm-9">
+        <input class="form-control" id="ItemSearch" placeholder="Type here..." maxlength="100" name="Item Search" title="Search by item name. Max 100 Characters.">
+    </div>
+    <div class="col-sm-1">
+        <button type="submit" class="btn btn-primary"">Submit</button>
+    </div>
+    <div class="col-sm-1">
+        <button type="reset" class="btn btn-danger" ">Reset</button>
+    </div>
+</form>
 
 
 <div class="container">
@@ -32,7 +43,7 @@
     </div>
 </div>
 
-<table class="table">
+@* <table class="table">
     <thead>
         <tr>
             <th>
@@ -79,4 +90,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table> *@
