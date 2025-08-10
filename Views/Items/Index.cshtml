@@ -22,6 +22,15 @@
         <button type="reset" class="btn btn-danger" ">Reset</button>
     </div>
 </form>
+@if (ViewBag.Quantity == 0)
+{
+    <p>No items found</p>
+}
+else
+{
+    <p>Results: @ViewBag.Quantity</p>
+}
+
 
 
 <div class="container">

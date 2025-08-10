@@ -33,7 +33,7 @@ namespace AOWebApp2.Controllers
                 amazonOrdersDb2025Context = amazonOrdersDb2025Context
                     .Where(i => i.ItemName.Contains(searchText));
             }
-
+            ViewBag.Quantity = amazonOrdersDb2025Context.Count();
             return View(await amazonOrdersDb2025Context.ToListAsync());
         }
 
