@@ -23,7 +23,7 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
                         <p class="card-text">Cost: $@Html.DisplayFor(modelItem => item.ItemCost)</p>
-                        <a href="#" class="btn btn-primary">View Item Details</a>
+                        <a asp-action="Details" asp-route-id="@item.ItemId" class="btn btn-primary">View Item Details</a>
                     </div>
                 </div>
         </div>
