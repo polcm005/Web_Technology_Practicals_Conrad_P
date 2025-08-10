@@ -13,7 +13,7 @@
 <form class="mb-3 row" method="post" asp-controller="Items" asp-action="Index">
     <label for="ItemSearch" class="col-sm-1 col-form-label">Item Search</label>
     <div class="col-sm-9">
-        <input class="form-control" id="ItemSearch" placeholder="Type here..." maxlength="100" name="Item Search" title="Search by item name. Max 100 Characters.">
+        <input class="form-control" id="ItemSearch" placeholder="Type here..." maxlength="100" name="searchText" title="Search by item name. Max 100 Characters." value="@ViewBag.searchText" type="text">
     </div>
     <div class="col-sm-1">
         <button type="submit" class="btn btn-primary"">Submit</button>
