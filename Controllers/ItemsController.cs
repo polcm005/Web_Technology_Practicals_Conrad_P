@@ -20,8 +20,20 @@ namespace AOWebApp2.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index(string searchText)
+        public async Task<IActionResult> Index(string searchText, int? categoryId)
         {
+            #region CategoriesQuery
+            var Categories = (from i in _context.ItemCategories
+                              where i.ParentCategory == null
+                              orderby i.CategoryName
+                              select new { i.CategoryId, i.CategoryName })
+                              .ToList();
+
+            ViewBag.CategoryList = new SelectList(Categories, nameof(ItemCategory.CategoryId), nameof(ItemCategory.CategoryName));
+            #endregion
+
+            #region ItemQuery
+
             ViewBag.searchText = searchText;
             var amazonOrdersDb2025Context = _context.Items
                 .Include(i => i.Category)
@@ -33,6 +45,14 @@ namespace AOWebApp2.Controllers
                 amazonOrdersDb2025Context = amazonOrdersDb2025Context
                     .Where(i => i.ItemName.Contains(searchText));
             }
+
+            if (categoryId != null)
+            {
+                amazonOrdersDb2025Context = amazonOrdersDb2025Context
+                    .Where(i => i.Category.CategoryId == categoryId || i.Category.ParentCategoryId == categoryId);
+            }
+            #endregion
+
             ViewBag.Quantity = amazonOrdersDb2025Context.Count();
             return View(await amazonOrdersDb2025Context.ToListAsync());
         }

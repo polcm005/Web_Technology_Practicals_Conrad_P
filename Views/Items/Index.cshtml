@@ -10,18 +10,23 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<form class="mb-3 row" method="post" asp-controller="Items" asp-action="Index">
-    <label for="ItemSearch" class="col-sm-1 col-form-label">Item Search</label>
-    <div class="col-sm-9">
-        <input class="form-control" id="ItemSearch" placeholder="Type here..." maxlength="100" name="searchText" title="Search by item name. Max 100 Characters." value="@ViewBag.searchText" type="text">
+<form class="mb-3 row justify-content-center" method="post" asp-controller="Items" asp-action="Index">
+    <div class="col-sm-6">
+        <input class="form-control" id="ItemSearch" placeholder="Enter item to search here..." maxlength="100" name="searchText" title="Search by item name. Max 100 Characters." value="@ViewBag.searchText" type="text">
     </div>
-    <div class="col-sm-1">
-        <button type="submit" class="btn btn-primary"">Submit</button>
+
+    <div class="col-sm-4">
+        <select class="form-select" name="categoryId" title="View items for a specific category" asp-items="@ViewBag.CategoryList">
+            <option selected>All Categories...</option>
+        </select>
     </div>
-    <div class="col-sm-1">
-        <button type="reset" class="btn btn-danger" ">Reset</button>
+    <div class="col-sm-2">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a asp-action="Create" class="btn btn-outline-danger">Create new</a>
     </div>
 </form>
+
+
 @if (ViewBag.Quantity == 0)
 {
     <p>No items found</p>
