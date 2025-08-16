@@ -29,7 +29,7 @@ namespace AOWebApp2.Controllers
                               select new { i.CategoryId, i.CategoryName })
                               .ToList();
 
-            ViewBag.CategoryList = new SelectList(Categories, nameof(ItemCategory.CategoryId), nameof(ItemCategory.CategoryName));
+            ViewBag.CategoryList = new SelectList(Categories, nameof(ItemCategory.CategoryId), nameof(ItemCategory.CategoryName), categoryId);
             #endregion
 
             #region ItemQuery
@@ -52,8 +52,9 @@ namespace AOWebApp2.Controllers
                     .Where(i => i.Category.CategoryId == categoryId || i.Category.ParentCategoryId == categoryId);
             }
             #endregion
+            if (!string.IsNullOrWhiteSpace(searchText) || categoryId != null) { 
+                ViewBag.Quantity = amazonOrdersDb2025Context.Count(); }
 
-            ViewBag.Quantity = amazonOrdersDb2025Context.Count();
             return View(await amazonOrdersDb2025Context.ToListAsync());
         }
 

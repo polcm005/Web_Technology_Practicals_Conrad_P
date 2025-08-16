@@ -16,7 +16,7 @@
     </div>
 
     <div class="col-sm-4">
-        <select class="form-select" name="categoryId" title="View items for a specific category" asp-items="@ViewBag.CategoryList">
+        <select class="form-select" name="categoryId" title="View items for a specific category" asp-items="@ViewBag.CategoryList" >
             <option selected>All Categories...</option>
         </select>
     </div>
@@ -29,9 +29,9 @@
 
 @if (ViewBag.Quantity == 0)
 {
-    <p>No items found</p>
+    <h5 style="color:red">No items found</h5>
 }
-else
+else if (ViewBag.Quantity >= 0)
 {
     <p>Results: @ViewBag.Quantity</p>
 }
