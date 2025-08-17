@@ -20,10 +20,33 @@ namespace AOWebApp2.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchCustomer, string suburbName)
         {
-            var amazonOrdersDb2025Context = _context.Customers.Include(c => c.Address);
-            return View(await amazonOrdersDb2025Context.ToListAsync());
+            #region CustomerQuery
+            //ViewBag.CustomerSearch = searchCustomer;
+            var customerList = new List<Customer>();
+
+            if (searchCustomer != null)
+            {
+                customerList = (from i in _context.Customers
+                                where i.FirstName.StartsWith(searchCustomer) 
+                                || i.LastName.StartsWith(searchCustomer)
+                                orderby i.FirstName.StartsWith(searchCustomer), i.LastName.StartsWith(searchCustomer)
+                                select i).ToList();
+            }
+
+            return View(customerList);
+
+            #endregion
+
+
+            #region SuburbQuery
+
+
+            #endregion
+
+            //var amazonOrdersDb2025Context = _context.Customers.Include(c => c.Address);
+            //return View(await amazonOrdersDb2025Context.ToListAsync());
         }
 
         // GET: Customers/Details/5
