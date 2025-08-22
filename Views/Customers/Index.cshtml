@@ -21,6 +21,10 @@
         <a asp-action="Create" class="btn btn-outline-danger">Create</a>
     </div>
 </form>
+@if (@ViewBag.customerCount > 0){
+    <div>Records returned: @ViewBag.customerCount</div>
+}
+
 
 <table class="table">
     <thead>

@@ -62,8 +62,8 @@ namespace AOWebApp2.Controllers
                     .Where(i => i.Address.Suburb == suburbName);
             }
 
-            customerList = await customerListQuery.ToListAsync(); 
-
+            customerList = await customerListQuery.ToListAsync();
+            ViewBag.customerCount = customerList.Count();
             return View(customerList);
             //return View(await amazonOrdersDb2025Context.ToListAsync());
         }
