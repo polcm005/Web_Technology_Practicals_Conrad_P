@@ -9,11 +9,11 @@
 
 <form class="mb-3 row justify-content-center" method="post" asp-controller="Customers" asp-action="Index">
     <div class="col-sm-6">
-        <input class="form-control" name="searchCustomer" id="CustomerSearch" placeholder="Enter customer to search here..." maxlength="100" title="Search by Customer. Max 100 Characters." value="" type="text">
+        <input class="form-control" name="searchCustomer" id="CustomerSearch" placeholder="Enter customer to search here..." maxlength="100" title="Search by Customer. Max 100 Characters." value="@ViewBag.customerSearched" type="text">
     </div>
     <div class="col-sm-4">
-        <select class="form-select" name="suburbName" title="View customers from a specific suburb">
-            <option selected>All Suburbs...</option>
+        <select class="form-select" name="suburbName" title="View customers from a specific suburb" asp-items="@ViewBag.SuburbList">
+            <option value="">All Suburbs...</option>
         </select>
     </div>
     <div class="col-sm-2">

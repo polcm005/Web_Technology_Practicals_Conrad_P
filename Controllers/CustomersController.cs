@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AOWebApp2.Data;
 using AOWebApp2.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AOWebApp2.Controllers
 {
@@ -20,32 +21,50 @@ namespace AOWebApp2.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(string searchCustomer, string suburbName)
+        public async Task<IActionResult> Index(string searchCustomer, string? suburbName)
         {
-            #region CustomerQuery
-            //ViewBag.CustomerSearch = searchCustomer;
-            var customerList = new List<Customer>();
+            #region SuburbQuery
+            var suburbs = (from i in _context.Addresses
+                           select i.Suburb)
+                           .Distinct()
+                           .OrderBy(i => i)
+                           .ToList();
 
-            if (searchCustomer != null)
+            ViewBag.SuburbList = new SelectList(suburbs, suburbName);
+            ViewBag.selectedSuburb = suburbName;
+            #endregion
+            
+            var customerList = new List<Customer>();
+            ViewBag.customerSearched = searchCustomer;
+
+            var customerListQuery = _context.Customers
+                .Include(i => i.Address)
+                .AsQueryable();
+
+            if (string.IsNullOrWhiteSpace(searchCustomer) && suburbName.IsNullOrEmpty())
             {
-                customerList = (from i in _context.Customers
-                                where i.FirstName.StartsWith(searchCustomer) 
-                                || i.LastName.StartsWith(searchCustomer)
-                                orderby i.FirstName.StartsWith(searchCustomer), i.LastName.StartsWith(searchCustomer)
-                                select i).ToList();
+                return View(customerList);
             }
 
+            if (!string.IsNullOrWhiteSpace(searchCustomer))
+            {
+                customerListQuery = (from i in customerListQuery
+                                     where i.FirstName.StartsWith(searchCustomer)
+                                     || i.LastName.StartsWith(searchCustomer)
+                                     select i)
+                                 .OrderBy(i => !i.FirstName.StartsWith(searchCustomer))
+                                 .ThenBy(i => !i.LastName.StartsWith(searchCustomer));
+            }
+
+            if (!suburbName.IsNullOrEmpty())
+            {
+                customerListQuery = customerListQuery
+                    .Where(i => i.Address.Suburb == suburbName);
+            }
+
+            customerList = await customerListQuery.ToListAsync(); 
+
             return View(customerList);
-
-            #endregion
-
-
-            #region SuburbQuery
-
-
-            #endregion
-
-            //var amazonOrdersDb2025Context = _context.Customers.Include(c => c.Address);
             //return View(await amazonOrdersDb2025Context.ToListAsync());
         }
 
