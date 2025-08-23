@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AOWebApp2.Data;
 using AOWebApp2.Models;
+using AOWebApp2.ViewModels;
 
 namespace AOWebApp2.Controllers
 {
@@ -20,7 +21,7 @@ namespace AOWebApp2.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index(string searchText, int? categoryId)
+        public async Task<IActionResult> Index(ItemSearchViewModel vm)
         {
             #region CategoriesQuery
             var Categories = (from i in _context.ItemCategories
@@ -29,33 +30,36 @@ namespace AOWebApp2.Controllers
                               select new { i.CategoryId, i.CategoryName })
                               .ToList();
 
-            ViewBag.CategoryList = new SelectList(Categories, nameof(ItemCategory.CategoryId), nameof(ItemCategory.CategoryName), categoryId);
+            vm.CategoryList = new SelectList(Categories, nameof(ItemCategory.CategoryId), nameof(ItemCategory.CategoryName), vm.CategoryId);
             #endregion
 
             #region ItemQuery
 
-            ViewBag.searchText = searchText;
             var amazonOrdersDb2025Context = _context.Items
                 .Include(i => i.Category)
                 .OrderBy(i => i.ItemName)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchText))
+            if (!string.IsNullOrWhiteSpace(vm.SearchText))
             {
                 amazonOrdersDb2025Context = amazonOrdersDb2025Context
-                    .Where(i => i.ItemName.Contains(searchText));
+                    .Where(i => i.ItemName.Contains(vm.SearchText));
             }
 
-            if (categoryId != null)
+            if (vm.CategoryId != null)
             {
                 amazonOrdersDb2025Context = amazonOrdersDb2025Context
-                    .Where(i => i.Category.CategoryId == categoryId || i.Category.ParentCategoryId == categoryId);
+                    .Where(i => i.Category.CategoryId == vm.CategoryId || i.Category.ParentCategoryId == vm.CategoryId);
             }
             #endregion
-            if (!string.IsNullOrWhiteSpace(searchText) || categoryId != null) { 
+
+            vm.ItemList = await amazonOrdersDb2025Context.ToListAsync();
+
+
+            if (!string.IsNullOrWhiteSpace(vm.SearchText) || vm.CategoryId != null) { 
                 ViewBag.Quantity = amazonOrdersDb2025Context.Count(); }
 
-            return View(await amazonOrdersDb2025Context.ToListAsync());
+            return View(vm);
         }
 
         // GET: Items/Details/5

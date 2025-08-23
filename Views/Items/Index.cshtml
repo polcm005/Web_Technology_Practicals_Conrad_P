@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AOWebApp2.Models.Item>
+﻿@model AOWebApp2.ViewModels.ItemSearchViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -12,11 +12,11 @@
 
 <form class="mb-3 row justify-content-center" method="post" asp-controller="Items" asp-action="Index">
     <div class="col-sm-6">
-        <input class="form-control" id="ItemSearch" placeholder="Enter item to search here..." maxlength="100" name="searchText" title="Search by item name. Max 100 Characters." value="@ViewBag.searchText" type="text">
+        <input class="form-control" id="ItemSearch" placeholder="Enter item to search here..." maxlength="100" name="searchText" title="Search by item name. Max 100 Characters." type="text" asp-for="SearchText">
     </div>
 
     <div class="col-sm-4">
-        <select class="form-select" name="categoryId" title="View items for a specific category" asp-items="@ViewBag.CategoryList" >
+        <select class="form-select" name="categoryId" title="View items for a specific category" asp-items="@Model.CategoryList" asp-for="@Model.CategoryId">
             <option selected>All Categories...</option>
         </select>
     </div>
@@ -27,20 +27,18 @@
 </form>
 
 
-@if (ViewBag.Quantity == 0)
+@if (@Model.ItemList.Count() == 0)
 {
     <h5 style="color:red">No items found</h5>
 }
-else if (ViewBag.Quantity >= 0)
+else if (@Model.ItemList.Count() >= 0)
 {
-    <p>Results: @ViewBag.Quantity</p>
+    <p>Results: @Model.ItemList.Count()</p>
 }
-
-
 
 <div class="container">
     <div class="row row-cols-4">
-        @foreach (var item in Model) {
+        @foreach (var item in Model.ItemList) {
             <div class="col">
                 <div class="card">
                     <img src=@Html.DisplayFor(modelItem => item.ItemImage) class="card-img-top" alt="..." />
