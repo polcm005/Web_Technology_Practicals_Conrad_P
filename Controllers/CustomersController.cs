@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AOWebApp2.Data;
 using AOWebApp2.Models;
 using Microsoft.IdentityModel.Tokens;
+using AOWebApp2.ViewModels;
 
 namespace AOWebApp2.Controllers
 {
@@ -21,7 +22,7 @@ namespace AOWebApp2.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(string searchCustomer, string? suburbName)
+        public async Task<IActionResult> Index(CustomerSearchVM csvm)
         {
             #region SuburbQuery
             var suburbs = (from i in _context.Addresses
@@ -30,41 +31,42 @@ namespace AOWebApp2.Controllers
                            .OrderBy(i => i)
                            .ToList();
 
-            ViewBag.SuburbList = new SelectList(suburbs, suburbName);
-            ViewBag.selectedSuburb = suburbName;
+            csvm.SuburbList = new SelectList(suburbs, csvm.Suburb);
+            //ViewBag.selectedSuburb = suburbName;
             #endregion
             
             var customerList = new List<Customer>();
-            ViewBag.customerSearched = searchCustomer;
+            //ViewBag.customerSearched = searchCustomer;
 
             var customerListQuery = _context.Customers
                 .Include(i => i.Address)
                 .AsQueryable();
 
-            if (string.IsNullOrWhiteSpace(searchCustomer) && suburbName.IsNullOrEmpty())
+            if (string.IsNullOrWhiteSpace(csvm.SearchText) && csvm.Suburb.IsNullOrEmpty())
             {
-                return View(customerList);
+                csvm.CustomerList = customerList;
+                return View(csvm);
             }
 
-            if (!string.IsNullOrWhiteSpace(searchCustomer))
+            if (!string.IsNullOrWhiteSpace(csvm.SearchText))
             {
                 customerListQuery = (from i in customerListQuery
-                                     where i.FirstName.StartsWith(searchCustomer)
-                                     || i.LastName.StartsWith(searchCustomer)
+                                     where i.FirstName.StartsWith(csvm.SearchText)
+                                     || i.LastName.StartsWith(csvm.SearchText)
                                      select i)
-                                 .OrderBy(i => !i.FirstName.StartsWith(searchCustomer))
-                                 .ThenBy(i => !i.LastName.StartsWith(searchCustomer));
+                                 .OrderBy(i => !i.FirstName.StartsWith(csvm.SearchText))
+                                 .ThenBy(i => !i.LastName.StartsWith(csvm.SearchText));
             }
 
-            if (!suburbName.IsNullOrEmpty())
+            if (!csvm.Suburb.IsNullOrEmpty())
             {
                 customerListQuery = customerListQuery
-                    .Where(i => i.Address.Suburb == suburbName);
+                    .Where(i => i.Address.Suburb == csvm.Suburb);
             }
 
-            customerList = await customerListQuery.ToListAsync();
+            csvm.CustomerList= await customerListQuery.ToListAsync();
             ViewBag.customerCount = customerList.Count();
-            return View(customerList);
+            return View(csvm);
             //return View(await amazonOrdersDb2025Context.ToListAsync());
         }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AOWebApp2.Models.Customer>
+﻿@model AOWebApp2.ViewModels.CustomerSearchVM
 
 @{
     ViewData["Title"] = "Index";
@@ -9,10 +9,10 @@
 
 <form class="mb-3 row justify-content-center" method="post" asp-controller="Customers" asp-action="Index">
     <div class="col-sm-6">
-        <input class="form-control" name="searchCustomer" id="CustomerSearch" placeholder="Enter customer to search here..." maxlength="100" title="Search by Customer. Max 100 Characters." value="@ViewBag.customerSearched" type="text">
+        <input class="form-control" id="CustomerSearch" placeholder="Enter customer to search here..." maxlength="100" title="Search by Customer. Max 100 Characters." type="text" asp-for="SearchText">
     </div>
     <div class="col-sm-4">
-        <select class="form-select" name="suburbName" title="View customers from a specific suburb" asp-items="@ViewBag.SuburbList">
+        <select class="form-select" title="View customers from a specific suburb" asp-items="@Model.SuburbList" asp-for="Suburb">
             <option value="">All Suburbs...</option>
         </select>
     </div>
@@ -21,8 +21,12 @@
         <a asp-action="Create" class="btn btn-outline-danger">Create</a>
     </div>
 </form>
-@if (@ViewBag.customerCount > 0){
+@* @if (@ViewBag.customerCount > 0){
     <div>Records returned: @ViewBag.customerCount</div>
+} *@
+@if(Model.CustomerList.Count > 0)
+{
+    <div>Customer Records Returned: @Model.CustomerList.Count</div>
 }
 
 
@@ -30,7 +34,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
+                @Html.DisplayNameFor(model => model.CustomerList[0].FullName)
             </th>
             @* <th>
                 @Html.DisplayNameFor(model => model.FirstName)
@@ -39,10 +43,10 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.CustomerList[0].Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ContactNumber)
+                @Html.DisplayNameFor(model => model.CustomerList[0].ContactNumber)
             </th>
             @* <th>
                 @Html.DisplayNameFor(model => model.MainPhoneNumber)
@@ -51,13 +55,13 @@
                 @Html.DisplayNameFor(model => model.SecondaryPhoneNumber)
             </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.CustomerList[0].Address)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.CustomerList)
         {
             <tr>
                 <td>
@@ -82,7 +86,12 @@
                     @Html.DisplayFor(modelItem => item.SecondaryPhoneNumber)
                 </td> *@
                 <td>
-                    @Html.DisplayFor(modelItem => item.Address.AddressId)
+                    @* @Html.DisplayFor(modelItem => item.Address.AddressId) *@
+                    @Html.DisplayFor(modelItem => item.Address.AddressLine)
+                    <br />
+                    @Html.DisplayFor(modelItem => item.Address.Suburb),
+                    @Html.DisplayFor(modelItem => item.Address.Postcode)
+                    [@Html.DisplayFor(modelItem => item.Address.Region)]
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
