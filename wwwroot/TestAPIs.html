@@ -17,6 +17,27 @@
 
     <script>
 
+        fetch('api/ParentCategoriesWebAPI')
+            .then((response) => response.json())
+            .then(data => {
+                let List = document.querySelector('#categories');
+                data.forEach(i => {
+                    let ListElement = document.createElement("li");
+                    ListElement.innerText = i.categoryName
+                    List.appendChild(ListElement);
+                })
+            })
+
+        fetch('api/ItemsWebAPI')
+            .then((response) => response.json())
+            .then(data => {
+                let List = document.querySelector('#itemList');
+                data.forEach(i => {
+                    let ListElement = document.createElement("li");
+                    ListElement.innerText = i.itemName
+                    List.appendChild(ListElement);
+                })
+            }) 
     </script>
 
 </body>

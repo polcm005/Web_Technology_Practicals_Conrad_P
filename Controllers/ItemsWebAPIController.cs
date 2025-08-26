@@ -34,13 +34,13 @@ namespace AOWebApp2.Controllers
             //}
             if (!SearchText.IsNullOrEmpty())
             {
-                ItemQuery = ItemQuery.Where(i => i.ItemName == SearchText);
+                ItemQuery = ItemQuery.Where(i => i.ItemName.StartsWith(SearchText));
             }
             else if (CategoryID.HasValue)
             {
                 ItemQuery = ItemQuery.Where(i => i.Category.ParentCategoryId == CategoryID);
             }
-            return await _context.Items.ToListAsync();
+            return await ItemQuery.ToListAsync();
         }
 
         // GET: api/ItemsWebAPI/5
