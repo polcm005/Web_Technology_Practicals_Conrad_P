@@ -11,6 +11,131 @@
     </div>
 </div>
 
+<div>
+    <svg width="100%" height="400px" class="border border-primary rounded p-2"></svg>
+</div>
+
+@section scripts
+
+{<script type="module">
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+    const svg = d3.select('svg');
+
+    let svgWidth = svg.node().getBoundingClientRect().width;
+    let svgHeight = svg.node().getBoundingClientRect().height;
+
+    console.log('width ' + svgWidth);
+    console.log('height' + svgHeight);
+
+    const chartMargins = {
+        left: 40,
+        right: 40,
+        top: 25,
+        bottom: 80
+    };
+
+    svgWidth = svgWidth - (chartMargins.left + chartMargins.right);
+    svgHeight = svgHeight - (chartMargins.top + chartMargins.bottom);
+
+    document.querySelector('[name="year"]').addEventListener("change", (yearEvent) => {
+        let year = yearEvent.target.value;
+        console.log("year " + year);
+
+        if (year.length > 0){
+            fetch(`/Reports/AnnualSalesReportData?year=${year}`)
+            .then(response => {
+                console.log("status: " + response.status);
+                console.log("text: " + response.statusText);
+                return response.json();
+            })
+            .then(i => buildGraph(i))
+            .catch(i => console.log("error: " + i.message));
+        }
+    })
+
+    function buildGraph(dataSet) {
+        console.log("dataset: ", dataSet);
+
+        var maxTotalItems = d3.max(dataSet, d => d.totalItems);
+        var minTotalItems = d3.min(dataSet, d => d.totalItems);
+
+        console.log("maxTotalItems = " + maxTotalItems);
+        console.log("minTotalItems = " + minTotalItems);
+
+        var barMargin = 10;
+        var barWidth = svgWidth/dataSet.length;
+
+        console.log("dataSet.length = " + dataSet.length);
+        console.log("barMargin = " + barMargin);
+        console.log("barWidth = " + barWidth);
+
+        var yScale = d3.scaleLinear()
+            .domain([0,maxTotalItems])
+            .range([svgHeight, 0]);
+
+        var monthArray = Array.from(dataSet, (d) => d.monthName);
+        console.log("monthArray", monthArray);
+
+        var xScale = d3.scaleBand()
+        .domain(monthArray)
+        .range([0, svgWidth])
+        .paddingInner(0.1);
+
+        console.log("xScale " + xScale("February"));
+
+        const chartGroup = svg.append('g')
+            .classed('chartGroup', true)
+            .attr('transform', `translate(${chartMargins.left}, ${chartMargins.top})`)
+
+        var barGroups = chartGroup
+            .selectAll('g')
+            .data(dataSet);
+
+        var newBarGroups = barGroups.enter()
+            .append('g')
+            .attr('transform', (d, i) => {
+            return `translate(${xScale(d.monthName)}, ${yScale(d.totalItems)})`;
+            });
+
+        console.log("newBarGroups ", newBarGroups);
+
+        newBarGroups.append('rect')
+            .attr('x', 0)
+            .attr('height', 0)
+            .attr('y', (d) => {return svgHeight - yScale(d.totalItems);})
+            .attr('width', xScale.bandwidth())
+            .attr('fill', 'transparent')
+            .transition().duration((d, i) => {return i * 200})
+            .delay((d, i) => {return i + 500}) 
+            .attr('y', 0)
+            .attr('height', (d) => {return svgHeight - yScale(d.totalItems);})
+            .style("fill", (d, i) => {return `rgb(${i*6+45},${i*6+145},${i*6+45})`})
+            
+
+        newBarGroups
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('x', (d) => {return xScale.bandwidth()/2; })
+        .attr('y', 20)
+        .attr('fill', 'white')
+        .style('font-size', '1em')
+        .text((d) => d.totalItems.toLocaleString());
+
+        var yAxis = d3.axisLeft(yScale);
+        chartGroup.append('g')
+            .classed('axis y', true)
+            .call(yAxis);
+
+        var xAxis = d3.axisBottom(xScale);
+        chartGroup.append('g')
+            .attr('transform', `translate(0,${svgHeight})`)
+            .classed('axis x', true)
+            .call(xAxis);
+    }
+
+</script>}
+
 
 
 
