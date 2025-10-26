@@ -1,6 +1,6 @@
 function CardV2({ itemId, itemName, itemDescription, itemCost, itemImage}) {
     return (
-        <div className="card" style={{ width: 25 + 'rem'}}>
+        <div className="card col-4 mb-2" style={{ width: 18 + 'rem'}}>
             <img src={itemImage} className="card-img-top" alt={"Image of " + itemName} />
             <div className="card-body">
                 <h2 className="card-title">{itemName}</h2>

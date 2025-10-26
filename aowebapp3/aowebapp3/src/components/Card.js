@@ -1,6 +1,6 @@
 function Card(props) {
     return (
-        <div className="card" style={{ width: 25 + 'rem'}}>
+        <div className="card col-4 mb-2" style={{ width: 18 + 'rem'}}>
             <img src={props.itemImage} className="card-img-top" alt={"Image of " + props.itemName} />
             <div className="card-body">
                 <h2 className="card-title">{props.itemName}</h2>

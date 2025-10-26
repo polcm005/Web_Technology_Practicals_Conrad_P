@@ -3,10 +3,11 @@ import './App.css';
 import Card from './components/Card';
 import CardV2 from './components/CardV2';
 import CardV3 from './components/CardV3';
+import CardListSearch from './components/CardListSearch';
 
 function App() {
   return (
-      <div className="App">
+      <div className="App container">
             <div className="bg-light py-1 mb-2">
                 <h2 className="text-center">Example application</h2>
             </div>
@@ -30,6 +31,9 @@ function App() {
                   itemImage="https://upload.wikimedia.org/wikipedia/commons/0/04/So_happy_smiling_cat.jpg"
                   itemCost="15.00"
               />
+
+                  <CardListSearch />
+             
             </div>
 
             {/*<img src={logo} className="App-logo" alt="logo" />*/}
