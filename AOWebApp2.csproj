@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="aowebapp3\aowebapp3\src\NewFolder\**" />
+    <Content Remove="aowebapp3\aowebapp3\src\NewFolder\**" />
+    <EmbeddedResource Remove="aowebapp3\aowebapp3\src\NewFolder\**" />
+    <None Remove="aowebapp3\aowebapp3\src\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.19">
       <PrivateAssets>all</PrivateAssets>
@@ -18,6 +25,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="aowebapp3\aowebapp3\src\assets\" />
+    <Folder Include="aowebapp3\aowebapp3\src\components\" />
   </ItemGroup>
 
 </Project>
