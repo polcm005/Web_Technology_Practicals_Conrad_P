@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="aowebapp3\aowebapp3\src\assets\" />
     <Folder Include="aowebapp3\aowebapp3\src\components\" />
+    <Folder Include="aowebapp3\aowebapp3\src\routes\" />
   </ItemGroup>
 
 </Project>

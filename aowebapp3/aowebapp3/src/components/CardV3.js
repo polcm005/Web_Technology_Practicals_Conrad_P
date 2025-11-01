@@ -1,11 +1,13 @@
-const CardV3 = ({ itemId, itemName, itemDescription, itemCost, itemImage}) => (
+import { Link } from "react-router-dom";
+
+const CardV3 = ({ itemId, itemName, itemDescription, itemCost, itemImage }) => (
     <div className="card col-4 mb-2" style={{ width: 18 + 'rem'}}>
             <img src={itemImage} className="card-img-top" alt={"Image of " + itemName} />
             <div className="card-body">
                 <h2 className="card-title">{itemName}</h2>
                 <p className="card-text">{itemDescription}</p>
                 <p className="card-text">{itemCost}</p>
-                <a href="#" className="btn btn-primary">button {itemId}</a>
+            <Link to={"/Products/" + itemId} className="btn btn-primary">View Item Details</Link>
                 </div>
         </div>
     )
