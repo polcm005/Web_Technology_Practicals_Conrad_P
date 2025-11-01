@@ -26,6 +26,9 @@ function App() {
                           <li className="nav-item">
                               <Link className="nav-link" to="/Products">Products</Link>
                           </li>
+                          <li className="nav-item">
+                              <Link className="nav-link" to="/Graph">Graph</Link>
+                          </li>
                       </ul>
                   </div>
               </div>

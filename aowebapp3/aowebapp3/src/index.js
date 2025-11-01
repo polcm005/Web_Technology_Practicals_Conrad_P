@@ -6,8 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
-import CardListSearch from "./components/CardListSearch"
-import CardDetail from "./components/CardDetail"
+import CardListSearch from "./components/CardListSearch";
+import CardDetail from "./components/CardDetail";
+import Graph from "./routes/Graph";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,6 +18,7 @@ root.render(
                 <Route path="/" element={<App /> }>
                     <Route path="/" element={<Home />} />
                     <Route path="Home" element={<Home />} />
+                    <Route path="Graph" element={<Graph />} />
                     <Route path="Contact" element={<Contact />} />
                     <Route path="Products" element={<CardListSearch />} />
                     <Route path="" element={<Home />} />
